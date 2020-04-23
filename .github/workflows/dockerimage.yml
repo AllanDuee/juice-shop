@@ -34,43 +34,49 @@ jobs:
         echo Add other actions to build,
         echo test, and deploy your project.
          
-   # - name: Build and push Docker images
-   #   uses: docker/build-push-action@v1.0.1
-   #   with:
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v1.0.1
+      with:
         # Username used to log in to a Docker registry. If not set then no login will occur
-   #     username: ${{ secrets.DOCKER_USERNAME }}
+        username: ${{ secrets.DOCKER_USERNAME }}
         # Password or personal access token used to log in to a Docker registry. If not set then no login will occur
-   #     password: ${{ secrets.DOCKER_PASSWORD }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
         # Server address of Docker registry. If not set then will default to Docker Hub
         # registry: # optional 
         # Docker repository to tag the image with
-   #     repository: ${{ secrets.DOCKER_USERNAME }}/juiceshop
+        repository: ${{ secrets.DOCKER_USERNAME }}/juiceshop
         # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
-   #     tags: v1
+        tags: v1
         # Automatically tags the built image with the git reference as per the readme
         # tag_with_ref: # optional
         # Automatically tags the built image with the git short SHA as per the readme
-   #     tag_with_sha: true
+        tag_with_sha: true
         # Path to the build context
         # path: # optional, default is .
         # Path to the Dockerfile (Default is '{path}/Dockerfile')
-   #     dockerfile: Dockerfile
+        dockerfile: Dockerfile
         
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+   # - name: SonarCloud Scan
+   #   uses: sonarsource/sonarcloud-github-action@master
+   #   env:
+   #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
            
-    - uses: sburris/dependency-check-action@master
-      with:
-        Project-Name: juice-shop
+   # - uses: sburris/dependency-check-action@master
+   #   with:
+   #     Project-Name: juice-shop
       
-    - name: Archive dependency check reports
-      uses: actions/upload-artifact@v1
-      with:
-        name: reports
-        path: reports
+   # - name: Archive dependency check reports
+   #   uses: actions/upload-artifact@v1
+   #   with:
+   #     name: reports
+   #     path: reports
+     
+    - name: use klar
+      run: |
+        wget https://github.com/optiopay/klar/releases/download/v2.4.0/klar-2.4.0-linux-amd64 -O klar
+        chmod +x klar
+        CLAIR_ADDR=http://clair.3r1.co:6060 ./klar docker.io/allanduee/sha-$    
         
     - name: prepare-kustomize
       run: |
